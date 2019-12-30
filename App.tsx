@@ -4,11 +4,12 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import { LoadAssets, StyleGuide } from './src/components';
+import {COLORS} from './src/utils/colors';
 import Home, { examples } from './src/features/Home';
 import TinderSwiping, { profiles } from './src/features/TinderSwiping'
 import Accordion from './src/features/Accordion';
 import AngularGradient from './src/features/AngularGradient';
-import Scale from './src/features/Scale/Scale';
+import Animation_1 from './src/features/Animation_1/Animation_1';
 
 const assets = [
   ...examples.map(example => example.source),
@@ -24,10 +25,10 @@ const AppNavigator = createAppContainer(
   createStackNavigator(
     {
       Home: {
-        screen: Scale,
+        screen: Animation_1,
+        // headerMode: 'none',
         navigationOptions: {
-          title: 'Clone the 5 min RN',
-          headerBackTitle: null
+          headerShown: false
         }
       },
       AngularGradient: {
@@ -46,7 +47,7 @@ const AppNavigator = createAppContainer(
     {
       defaultNavigationOptions: {
         headerStyle: {
-          backgroundColor: StyleGuide.palette.primary,
+          backgroundColor: COLORS.WHITE,
           borderBottomWidth: 0
         },
         headerTintColor: 'white'
