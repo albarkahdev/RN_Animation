@@ -1,13 +1,22 @@
 import React from 'react';
-import {Dimensions, SafeAreaView, View, Text} from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { SafeAreaView, View, Text } from 'react-native';
+import { Agenda } from 'react-native-calendars';
+import Animated from 'react-native-reanimated';
 
 import StyleGuide from '../../components/StyleGuide';
-import {FONTS} from '../../utils/fonts';
-import {COLORS} from '../../utils/colors';
+import { FONTS } from '../../utils/fonts';
+import { COLORS } from '../../utils/colors';
 
-const { width } = Dimensions.get('window');
+import { TODO_SIZE_Y, todos, PlusButton } from './Todo';
+import { SortableList } from './SortableList';
+
+const { Value } = Animated;
+
 export default () => {
+  const offsets = todos.map((_, index) => ({
+    x: new Value(0),
+    y: new Value(index * 2 * TODO_SIZE_Y)
+  }));
   return (
     <SafeAreaView style={{flex: 1}}>
     <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
@@ -51,86 +60,12 @@ export default () => {
         style={{backgroundColor: COLORS.WHITE}}
       />
       <View style={{flex: 5.5}}>
-        <BigBox
-          headline="Group Meeting"
-          description="Make a long-term plan for the company"
-          time="8:00AM"
-          isFirst
-        />
-        <BigBox
-          headline="Develop A Work Plan"
-          description=""
-          time="9:00AM"
-          isFirst={false}
-        />
-        <SmallBox headline="Making Salad" isFirst />
-        <SmallBox headline="Take Medicine" isFirst={false} />
-        <View style={{
-          backgroundColor: COLORS.PURE_RED, borderRadius: 25, width: 50, height: 50,
-          justifyContent: 'center', alignItems: 'center',
-          shadowColor: COLORS.PURE_RED,
-          shadowOffset: { width: 1, height: 1 },
-          shadowOpacity: 0.5,
-          shadowRadius: 2,
-          position: 'absolute',
-          bottom: width / 10,
-          left: width / 2 - 20
-        }}>
-          <Text style={{color: COLORS.WHITE, fontFamily: FONTS.SemiBold, fontSize: 30}}>+</Text>
-        </View>
+        {todos.map((todo, index) => (
+          <SortableList key={todo.id} {...{ todo, offsets, index }} />
+        ))}
+        <PlusButton />
       </View>
     </View>
     </SafeAreaView>
   )
-};
-
-interface BigBoxType {
-  headline: string;
-  description: string;
-  time: string;
-  isFirst: boolean;
-};
-
-const BigBox = (props: BigBoxType) => {
-  const {headline, description, time, isFirst} = props;
-  const primaryColor = isFirst ? COLORS.VERY_LIGHT_RED : COLORS.DARK_MODERATE_VIOLET;
-  return(
-    <View style={{
-      backgroundColor: primaryColor, margin: 10, marginVertical: 5, borderRadius: 10,
-      justifyContent: 'center', alignItems: 'left'
-    }}>
-      <View style={{
-        // padding: 10,
-        margin: 20, marginBottom: 10,
-      }}>
-        <Text style={[StyleGuide.typography.headline, {color: COLORS.WHITE, fontFamily: FONTS.Bold}]}>{headline}</Text>
-        {isFirst && <Text style={[StyleGuide.typography.body, {color: COLORS.WHITE, marginTop: 5}]}>{description}</Text>}
-      </View>
-      <View style={{
-        padding: 10, margin: 20, marginTop: 10, backgroundColor: COLORS.WHITE, borderRadius: 10
-      }}>
-        <Text style={[StyleGuide.typography.body, {color: primaryColor}]}>{time}</Text>
-      </View>
-    </View>
-  );
-};
-
-interface SmallBoxType {
-  headline: string;
-  isFirst: boolean;
-};
-
-const SmallBox = (props: SmallBoxType) => {
-  const {headline, isFirst} = props;
-  const primaryColor = isFirst ? COLORS.VERY_LIGHT_RED : COLORS.VERY_LIGHT_ORANGE;
-  return(
-    <View style={{
-      backgroundColor: primaryColor, margin: 10, marginVertical: 5, borderRadius: 10,
-      justifyContent: 'center', alignItems: 'left'
-    }}>
-      <View style={{margin: 20}}>
-        <Text style={[StyleGuide.typography.headline, {color: COLORS.WHITE, fontFamily: FONTS.Bold}]}>{headline}</Text>
-      </View>
-    </View>
-  );
 };

@@ -17,6 +17,11 @@ export const examples = [
     screen: 'Accordion',
     title: 'Accordion',
     source: require('../../../assets/examples/accordion.png')
+  },
+  {
+    screen: 'Todo',
+    title: 'Todo',
+    source: require('../../../assets/examples/todo.jpg')
   }
 ];
 
